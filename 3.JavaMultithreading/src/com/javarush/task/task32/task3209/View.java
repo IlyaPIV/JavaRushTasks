@@ -43,7 +43,21 @@ public class View extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        String com = e.getActionCommand();
+        switch (com) {
+            case "Новый": controller.createNewDocument();
+                            break;
+            case "Открыть": controller.openDocument();
+                            break;
+            case "Сохранить": controller.saveDocument();
+                            break;
+            case "Сохранить как...": controller.saveDocumentAs();
+                            break;
+            case "Выход": controller.exit();
+                            break;
+            case "О программе": showAbout();
+                            break;
+        }
     }
 
     public void init(){
@@ -80,7 +94,12 @@ public class View extends JFrame implements ActionListener {
     }
 
     public void selectedTabChanged(){
-
+        if (tabbedPane.getSelectedIndex() == 0) {
+            controller.setPlainText(plainTextPane.getText());
+        } else {
+            plainTextPane.setText(controller.getPlainText());
+        }
+        resetUndo();
     }
 
     public boolean canUndo(){
@@ -123,4 +142,19 @@ public class View extends JFrame implements ActionListener {
     public void exit() {
         controller.exit();
     }
+
+    public void selectHtmlTab(){
+        tabbedPane.setSelectedIndex(0); //html
+        resetUndo();
+    }
+
+    public void update() {
+        htmlTextPane.setDocument(controller.getDocument());
+    }
+
+    public void showAbout() {
+        JOptionPane.showMessageDialog(this, "Лучший HTML редактор", "О программе", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
 }
